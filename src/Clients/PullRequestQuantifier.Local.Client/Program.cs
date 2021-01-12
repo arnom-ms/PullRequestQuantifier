@@ -60,19 +60,18 @@
                     new DirectoryInfo(repoRootPath).Parent?.FullName,
                     ".prquantifier");
 
-                quantifyClient = new QuantifyClient(contextPath);
-
                 // run this as a service in case is configured otherwise only run once
                 if (commandLine.Service)
                 {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    Task.Factory.StartNew(() => QuantifyLoop(repoRootPath, commandLine.Output));
+                    Task.Factory.StartNew(() => QuantifyLoop(repoRootPath, contextPath, commandLine.Output));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                     await Run(repoRootPath, contextPath);
                 }
 
                 // in case service is not set or false then run once and exit
+                quantifyClient = new QuantifyClient(contextPath);
                 PrintResult(
                     await quantifyClient.Compute(repoRootPath),
                     commandLine.Output);
@@ -81,6 +80,7 @@
 
         private static void QuantifyLoop(
             string gitRepoPath,
+            string contextPath,
             ClientOutputType clientOutputType)
         {
             while (true)
@@ -91,6 +91,7 @@
                     continue;
                 }
 
+                quantifyClient = new QuantifyClient(contextPath);
                 PrintResult(
                     quantifyClient.Compute(gitRepoPath).Result,
                     clientOutputType);

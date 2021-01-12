@@ -66,7 +66,7 @@ namespace PullRequestQuantifier.Client.ContextGenerator
                 },
                 DynamicBehaviour = false,
                 Thresholds = defaultThresholds,
-                Excluded = new List<string> { "*.csproj" },
+                Excluded = new List<string>(),
                 GitOperationType = new List<GitOperationType> { GitOperationType.Add, GitOperationType.Delete },
                 AdditionPercentile = defaultPercentileValue,
                 DeletionPercentile = defaultPercentileValue
